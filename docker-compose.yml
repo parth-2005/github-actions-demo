@@ -5,7 +5,7 @@ services:
     build:
       context: .
     ports:
-      - "8000:3000"
+      - "3000:3000"
     environment:
       MONGO_URI: mongodb://mongo:27017/github-actions-demo
     depends_on:

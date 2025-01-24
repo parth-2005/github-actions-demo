@@ -1,0 +1,48 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  ci-build-and-push:
+    name: CI - Build & Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Log in to Docker Hub
+      run: |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/node-mongo-app:latest .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/node-mongo-app:latest
+
+    - name: Run Tests
+      run: |
+        npm install
+        npm test
+
+  cd-deploy:
+    name: CD - Deploy to EC2
+    needs: ci-build-and-push
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Pull Docker Image
+      run: |
+        sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/node-mongo-app:latest
+
+    - name: Deploy with Docker Compose
+      run: |
+        sudo docker-compose down || true
+        sudo docker-compose up -d

@@ -1,4 +1,7 @@
 |-- .dockerignore
+|-- .github
+    |-- workflows
+        |-- main.yml
 |-- .gitignore
 |-- app.js
 |-- docker-compose.yml
