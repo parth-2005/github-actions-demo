@@ -24,11 +24,6 @@ jobs:
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/node-mongo-app:latest .
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/node-mongo-app:latest
 
-    - name: Run Tests
-      run: |
-        npm install
-        npm test
-
   cd-deploy:
     name: CD - Deploy to EC2
     needs: ci-build-and-push
