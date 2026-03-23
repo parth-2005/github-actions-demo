@@ -5,7 +5,7 @@ describe('API Tests', () => {
   it('should return a welcome message', async () => {
     const res = await request(app).get('/');
     expect(res.statusCode).toBe(200);
-    expect(res.text).toBe('Hello, World! Deployed using GitHub Actions with MongoDB 🚀');
+    expect(res.text).toBe('Hello, World! Deployed using GitHub Actions with Mongo 🚀');
   });
 
   it('should save a message to the database', async () => {
